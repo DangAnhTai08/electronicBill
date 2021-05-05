@@ -4,7 +4,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Data
@@ -31,8 +33,16 @@ public class SaleUserEntity {
     private String userPassword;
 
     @Column(name = "user_status")
-    private String userStatus;
+    private Integer userStatus;
 
     @Column(name = "user_created")
     private Timestamp userCreated;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "sale_user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<SaleRoleEntity> roles = new HashSet<>();
 }
